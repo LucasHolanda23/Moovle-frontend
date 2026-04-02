@@ -55,7 +55,8 @@ function App() {
     if (valor.trim().length > 0) {
       const valorNormalizado = normalizar(valor);
       const filtrados = FILMES_DB.filter(filme => 
-        normalizar(filme.titulo).includes(valorNormalizado)
+        normalizar(filme.titulo).includes(valorNormalizado) &&
+        !tentativas.some(t => normalizar(t.titulo) === normalizar(filme.titulo))
       ).slice(0, 5); 
       setSugestoes(filtrados);
     } else {
@@ -75,7 +76,12 @@ function App() {
     const filmeChutado = FILMES_DB.find(f => normalizar(f.titulo) === normalizar(chute));
     
     if (!filmeChutado) {
-      setMensagem("⚠️ Selecione um filme da lista.");
+      setMensagem("Selecione um filme da lista.");
+      return;
+    }
+
+    if (tentativas.some(t => normalizar(t.titulo) === normalizar(filmeChutado.titulo))) {
+      setMensagem("Você já tentou este filme!");
       return;
     }
 
