@@ -2,36 +2,36 @@ import { useState, useEffect } from 'react';
 import './App.css';
 
 const FILMES_DB = [
-  { titulo: "Procurando Nemo", ano: 2003, genero: "Aventura", estudio: "Pixar", diretor: "Andrew Stanton" },
-  { titulo: "A Era do Gelo", ano: 2002, genero: "Comédia", estudio: "Blue Sky", diretor: "Chris Wedge" },
-  { titulo: "A Era do Gelo 2", ano: 2006, genero: "Comédia", estudio: "Blue Sky", diretor: "Carlos Saldanha" },
-  { titulo: "A Era do Gelo 3", ano: 2009, genero: "Comédia", estudio: "Blue Sky", diretor: "Carlos Saldanha" },
-  { titulo: "A Era do Gelo 4", ano: 2012, genero: "Comédia", estudio: "Blue Sky", diretor: "Steve Martino" },
-  { titulo: "A Era do Gelo: O Big Bang", ano: 2016, genero: "Comédia", estudio: "Blue Sky", diretor: "Mike Thurmeier" },
-  { titulo: "Toy Story", ano: 1995, genero: "Aventura", estudio: "Pixar", diretor: "John Lasseter" },
-  { titulo: "Shrek", ano: 2001, genero: "Comédia", estudio: "Dreamworks", diretor: "Andrew Adamson" },
-  { titulo: "Carros", ano: 2006, genero: "Aventura", estudio: "Pixar", diretor: "John Lasseter" },
-  { titulo: "Monstros S.A.", ano: 2001, genero: "Comédia", estudio: "Pixar", diretor: "Pete Docter" },
-  { titulo: "Interestelar", ano: 2014, genero: "Ficção Científica", estudio: "Warner Bros", diretor: "Christopher Nolan" },
-  { titulo: "O Poderoso Chefão", ano: 1972, genero: "Crime", estudio: "Paramount", diretor: "Francis Ford Coppola" },
-  { titulo: "Pulp Fiction", ano: 1994, genero: "Crime", estudio: "Miramax", diretor: "Quentin Tarantino" },
-  { titulo: "Batman: O Cavaleiro das Trevas", ano: 2008, genero: "Ação", estudio: "Warner Bros", diretor: "Christopher Nolan" },
-  { titulo: "Parasita", ano: 2019, genero: "Suspense", estudio: "CJ Entertainment", diretor: "Bong Joon-ho" },
-  { titulo: "Matrix", ano: 1999, genero: "Ficção Científica", estudio: "Warner Bros", diretor: "Lana Wachowski" },
-  { titulo: "O Rei Leão", ano: 1994, genero: "Animação", estudio: "Disney", diretor: "Roger Allers" },
-  { titulo: "Titanic", ano: 1997, genero: "Romance", estudio: "Paramount", diretor: "James Cameron" },
-  { titulo: "Vingadores: Ultimato", ano: 2019, genero: "Ação", estudio: "Marvel", diretor: "Anthony Russo" },
-  { titulo: "Coringa", ano: 2019, genero: "Drama", estudio: "Warner Bros", diretor: "Todd Phillips" },
-  { titulo: "O Silêncio dos Inocentes", ano: 1991, genero: "Suspense", estudio: "Orion", diretor: "Jonathan Demme" },
-  { titulo: "Forrest Gump", ano: 1994, genero: "Drama", estudio: "Paramount", diretor: "Robert Zemeckis" },
-  { titulo: "Clube da Luta", ano: 1999, genero: "Drama", estudio: "Fox", diretor: "David Fincher" },
-  { titulo: "Inception", ano: 2010, genero: "Ficção Científica", estudio: "Warner Bros", diretor: "Christopher Nolan" },
-  { titulo: "Jurassic Park", ano: 1993, genero: "Aventura", estudio: "Universal", diretor: "Steven Spielberg" },
-  { titulo: "O Exorcista", ano: 1973, genero: "Terror", estudio: "Warner Bros", diretor: "William Friedkin" },
-  { titulo: "La La Land", ano: 2016, genero: "Musical", estudio: "Summit Entertainment", diretor: "Damien Chazelle" },
-  { titulo: "Gladiador", ano: 2000, genero: "Ação", estudio: "DreamWorks", diretor: "Ridley Scott" },
-  { titulo: "A Viagem de Chihiro", ano: 2001, genero: "Animação", estudio: "Studio Ghibli", diretor: "Hayao Miyazaki" },
-  { titulo: "Cidade de Deus", ano: 2002, genero: "Drama", estudio: "O2 Filmes", diretor: "Fernando Meirelles" }
+  { titulo: "Procurando Nemo", ano: 2003, genero: "Aventura", estudio: "Pixar", diretor: "Andrew Stanton", duracao: 100 },
+  { titulo: "A Era do Gelo", ano: 2002, genero: "Comédia", estudio: "Blue Sky", diretor: "Chris Wedge", duracao: 81 },
+  { titulo: "A Era do Gelo 2", ano: 2006, genero: "Comédia", estudio: "Blue Sky", diretor: "Carlos Saldanha", duracao: 91 },
+  { titulo: "A Era do Gelo 3", ano: 2009, genero: "Comédia", estudio: "Blue Sky", diretor: "Carlos Saldanha", duracao: 94 },
+  { titulo: "A Era do Gelo 4", ano: 2012, genero: "Comédia", estudio: "Blue Sky", diretor: "Steve Martino", duracao: 88 },
+  { titulo: "A Era do Gelo: O Big Bang", ano: 2016, genero: "Comédia", estudio: "Blue Sky", diretor: "Mike Thurmeier", duracao: 94 },
+  { titulo: "Toy Story", ano: 1995, genero: "Aventura", estudio: "Pixar", diretor: "John Lasseter", duracao: 81 },
+  { titulo: "Shrek", ano: 2001, genero: "Comédia", estudio: "Dreamworks", diretor: "Andrew Adamson", duracao: 90 },
+  { titulo: "Carros", ano: 2006, genero: "Aventura", estudio: "Pixar", diretor: "John Lasseter", duracao: 117 },
+  { titulo: "Monstros S.A.", ano: 2001, genero: "Comédia", estudio: "Pixar", diretor: "Pete Docter", duracao: 92 },
+  { titulo: "Interestelar", ano: 2014, genero: "Ficção Científica", estudio: "Warner Bros", diretor: "Christopher Nolan", duracao: 169 },
+  { titulo: "O Poderoso Chefão", ano: 1972, genero: "Crime", estudio: "Paramount", diretor: "Francis Ford Coppola", duracao: 175 },
+  { titulo: "Pulp Fiction", ano: 1994, genero: "Crime", estudio: "Miramax", diretor: "Quentin Tarantino", duracao: 154 },
+  { titulo: "Batman: O Cavaleiro das Trevas", ano: 2008, genero: "Ação", estudio: "Warner Bros", diretor: "Christopher Nolan", duracao: 152 },
+  { titulo: "Parasita", ano: 2019, genero: "Suspense", estudio: "CJ Entertainment", diretor: "Bong Joon-ho", duracao: 132 },
+  { titulo: "Matrix", ano: 1999, genero: "Ficção Científica", estudio: "Warner Bros", diretor: "Lana Wachowski", duracao: 136 },
+  { titulo: "O Rei Leão", ano: 1994, genero: "Animação", estudio: "Disney", diretor: "Roger Allers", duracao: 88 },
+  { titulo: "Titanic", ano: 1997, genero: "Romance", estudio: "Paramount", diretor: "James Cameron", duracao: 194 },
+  { titulo: "Vingadores: Ultimato", ano: 2019, genero: "Ação", estudio: "Marvel", diretor: "Anthony Russo", duracao: 181 },
+  { titulo: "Coringa", ano: 2019, genero: "Drama", estudio: "Warner Bros", diretor: "Todd Phillips", duracao: 122 },
+  { titulo: "O Silêncio dos Inocentes", ano: 1991, genero: "Suspense", estudio: "Orion", diretor: "Jonathan Demme", duracao: 118 },
+  { titulo: "Forrest Gump", ano: 1994, genero: "Drama", estudio: "Paramount", diretor: "Robert Zemeckis", duracao: 142 },
+  { titulo: "Clube da Luta", ano: 1999, genero: "Drama", estudio: "Fox", diretor: "David Fincher", duracao: 139 },
+  { titulo: "Inception", ano: 2010, genero: "Ficção Científica", estudio: "Warner Bros", diretor: "Christopher Nolan", duracao: 148 },
+  { titulo: "Jurassic Park", ano: 1993, genero: "Aventura", estudio: "Universal", diretor: "Steven Spielberg", duracao: 127 },
+  { titulo: "O Exorcista", ano: 1973, genero: "Terror", estudio: "Warner Bros", diretor: "William Friedkin", duracao: 122 },
+  { titulo: "La La Land", ano: 2016, genero: "Musical", estudio: "Summit Entertainment", diretor: "Damien Chazelle", duracao: 128 },
+  { titulo: "Gladiador", ano: 2000, genero: "Ação", estudio: "DreamWorks", diretor: "Ridley Scott", duracao: 155 },
+  { titulo: "A Viagem de Chihiro", ano: 2001, genero: "Animação", estudio: "Studio Ghibli", diretor: "Hayao Miyazaki", duracao: 125 },
+  { titulo: "Cidade de Deus", ano: 2002, genero: "Drama", estudio: "O2 Filmes", diretor: "Fernando Meirelles", duracao: 130 }
 ];
 
 function App() {
@@ -104,16 +104,21 @@ function App() {
     return { cl: "wrong", txt: `${val} ${val < filmeDoDia.ano ? "↑" : "↓"}` };
   };
 
+  const compareDuracao = (val) => {
+    if (val === filmeDoDia.duracao) return { cl: "match", txt: `${val} min` };
+    return { cl: "wrong", txt: `${val} min ${val < filmeDoDia.duracao ? "↑" : "↓"}` };
+  };
+
   const compareExact = (campo, val) => {
     return val === filmeDoDia[campo] ? "match" : "wrong";
   };
 
   if (!filmeDoDia) return <div className="loading">Carregando filme do dia...</div>;
-
+//NUM SEI QUAL NOME VAI SER
   return (
     <div className="container">
-      <h1>CINELE</h1>
-      <p className="subtitle">CINE CHALLENGE</p>
+      <h1>MOOVLE</h1>
+      <p className="subtitle">Boa sorte !</p>
 
       <div className="game-area">
         <div className="input-section">
@@ -160,6 +165,10 @@ function App() {
                   <div className={`feedback-tag ${compareExact("genero", t.genero)}`}>
                     <span className="tag-label">GÊNERO</span>
                     <span>{t.genero}</span>
+                  </div>
+                  <div className={`feedback-tag ${compareDuracao(t.duracao).cl}`}>
+                    <span className="tag-label">DURAÇÃO</span>
+                    <span>{compareDuracao(t.duracao).txt}</span>
                   </div>
                   <div className={`feedback-tag ${compareExact("estudio", t.estudio)}`}>
                     <span className="tag-label">ESTÚDIO</span>
