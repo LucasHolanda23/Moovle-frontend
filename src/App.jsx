@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import './App.css';
 
+/**
+ * Banco de dados temporário de filmes para testes.
+ * Cada filme contém atributos para comparação no jogo.
+ */
 const FILMES_DB = [
   { titulo: "Procurando Nemo", ano: 2003, genero: "Aventura", estudio: "Pixar", diretor: "Andrew Stanton", duracao: 100 },
   { titulo: "A Era do Gelo", ano: 2002, genero: "Comédia", estudio: "Blue Sky", diretor: "Chris Wedge", duracao: 81 },
@@ -35,23 +39,33 @@ const FILMES_DB = [
 ];
 
 function App() {
+  // --- Estados do Jogo ---
   const [filmeDoDia, setFilmeDoDia] = useState(null);
   const [chute, setChute] = useState("");
   const [sugestoes, setSugestoes] = useState([]);
   const [tentativas, setTentativas] = useState([]);
-  const [status, setStatus] = useState("jogando"); 
+  const [status, setStatus] = useState("jogando"); // 'jogando' ou 'venceu'
   const [mensagem, setMensagem] = useState("");
 
+  
   useEffect(() => {
-    // Novo desafio selecionado!
-    setFilmeDoDia(FILMES_DB[21]);
+    // id do filme
+    setFilmeDoDia(FILMES_DB[10]);
   }, []);
 
-  const normalizar = (str) => str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  /**
+   * move acentos e converte para minúsculas para comparação de strings.
+   */
+  const normalizar = (str) => 
+    str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
+  /**
+   * Gerencia a mudança no campo de input e filtra sugestões.
+   */
   const handleInputChange = (e) => {
     const valor = e.target.value;
     setChute(valor);
+
     if (valor.trim().length > 0) {
       const valorNormalizado = normalizar(valor);
       const filtrados = FILMES_DB.filter(filme => 
@@ -69,6 +83,9 @@ function App() {
     setSugestoes([]);
   };
 
+  /**
+   * Processa o envio de um palpite.
+   */
   const handleEnviarChute = (e) => {
     if (e) e.preventDefault();
     if (!chute.trim() || status !== "jogando") return;
@@ -88,6 +105,7 @@ function App() {
     const novasTentativas = [...tentativas, filmeChutado];
     setTentativas(novasTentativas);
 
+    // Verifica vitória
     if (normalizar(filmeChutado.titulo) === normalizar(filmeDoDia.titulo)) {
       setStatus("venceu");
       setMensagem("Parabéns! Você acertou.");
@@ -98,6 +116,8 @@ function App() {
     setChute("");
     setSugestoes([]);
   };
+
+  // --- Lógica de Comparação Visual ---
 
   const compareAno = (val) => {
     if (val === filmeDoDia.ano) return { cl: "match", txt: val };
@@ -113,15 +133,20 @@ function App() {
     return val === filmeDoDia[campo] ? "match" : "wrong";
   };
 
+  // Renderização de carregamento
   if (!filmeDoDia) return <div className="loading">Carregando filme do dia...</div>;
-//NUM SEI QUAL NOME VAI SER
+
   return (
     <div className="container">
-      <h1>MOOVLE</h1>
-      <p className="subtitle">Boa sorte !</p>
+      <header>
+        <h1>DESCUBRA O FILME</h1>
+        <br />
+        <p className="subtitle">Boa sorte!</p>
+      </header>
 
-      <div className="game-area">
-        <div className="input-section">
+      <main className="game-area">
+        {/* Seção de Entrada do Usuário */}
+        <section className="input-section">
           <div className="input-wrapper">
             <form onSubmit={handleEnviarChute}>
               <input 
@@ -136,6 +161,8 @@ function App() {
                 {status === "jogando" ? "CENA!" : "FIM"}
               </button>
             </form>
+
+            {/* Lista de Sugestões (Autocomplete) */}
             {sugestoes.length > 0 && (
               <ul className="suggestions-list">
                 {sugestoes.map((s, i) => (
@@ -147,9 +174,10 @@ function App() {
             )}
           </div>
           {mensagem && <p className={`status-msg ${status}`}>{mensagem}</p>}
-        </div>
+        </section>
 
-        <div className="tentativas-list">
+        {/* Listagem de Tentativas Realizadas */}
+        <section className="tentativas-list">
           {tentativas.length > 0 && <h3>Suas Tentativas ({tentativas.length})</h3>}
           <ul>
             {[...tentativas].reverse().map((t, i) => (
@@ -182,14 +210,15 @@ function App() {
               </li>
             ))}
           </ul>
-        </div>
+        </section>
 
-        {(status !== "jogando") && (
+        {/* Controle de Reinício */}
+        {status !== "jogando" && (
           <button className="reset-btn" onClick={() => window.location.reload()}>
             NOVA SESSÃO
           </button>
         )}
-      </div>
+      </main>
     </div>
   );
 }
