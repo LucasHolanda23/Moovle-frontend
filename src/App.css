@@ -102,7 +102,7 @@ input:focus {
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
 }
 
-button {
+.button-red {
   padding: 1rem 3.5rem;
   border-radius: 20px;
   border: none;
@@ -116,13 +116,13 @@ button {
   letter-spacing: 1.5px;
 }
 
-button:hover:not(:disabled) {
+.button-red:hover:not(:disabled) {
   transform: translateY(-2px);
   filter: brightness(1.15);
   box-shadow: 0 10px 30px rgba(229, 9, 20, 0.4);
 }
 
-button:disabled {
+.button-red:disabled {
   background: #1a1a20;
   color: #444;
   cursor: not-allowed;
@@ -184,7 +184,32 @@ button:disabled {
   font-weight: 700;
   opacity: 0.7;
 }
+.icon-help {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+}
 
+.icon-help button {
+  background: transparent;
+  border: 1px solid var(--glass-border);
+  color: var(--text-dim);
+  padding: 12px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.icon-help button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: white;
+  color: white;
+  transform: scale(1.1);
+}
 .tentativa-item {
   width: 45rem;
   display: flex;
@@ -268,7 +293,7 @@ button:disabled {
   .feedback-row { grid-template-columns: repeat(2, 1fr); }
   .suggestions-list { right: 0; }
   form { flex-direction: column; }
-  button { width: 100%; }
+  .button-red { width: 100%; }
 }
 
 .reset-btn {
@@ -305,7 +330,86 @@ button:disabled {
 @media (max-width: 500px) {
   h1 { font-size: 2.8rem; }
   form { flex-direction: column; }
-  button { width: 100%; }
+  .button-red { width: 100%; }
   .suggestions-list { width: 100%; }
   .feedback-row { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Tutorial Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modal-content {
+  background: #1a1a1a;
+  border: 1px solid var(--glass-border);
+  border-radius: 30px;
+  padding: 3rem;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+  animation: modalAppear 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes modalAppear {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-content h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 800;
+  color: white;
+}
+
+.modal-content p {
+  color: var(--text-dim);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.modal-content ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 2.5rem;
+}
+
+.modal-content li {
+  margin-bottom: 1.2rem;
+  color: #ddd;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.modal-content li::before {
+  content: "•";
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.text-match {
+  color: #00e676;
+  font-weight: bold;
+}
+
+.text-wrong {
+  color: #9ca3af;
+  font-weight: bold;
+}
+
+.modal-content .button-red {
+  width: 100%;
 }

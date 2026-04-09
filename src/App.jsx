@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import './App.css';
-
+import { AiFillAlert } from "react-icons/ai";
 /**
  * Banco de dados temporário de filmes para testes.
  * Cada filme contém atributos para comparação no jogo.
  */
+
 const FILMES_DB = [
   { titulo: "Procurando Nemo", ano: 2003, genero: "Aventura", estudio: "Pixar", diretor: "Andrew Stanton", duracao: 100 },
   { titulo: "A Era do Gelo", ano: 2002, genero: "Comédia", estudio: "Blue Sky", diretor: "Chris Wedge", duracao: 81 },
@@ -46,8 +47,8 @@ function App() {
   const [tentativas, setTentativas] = useState([]);
   const [status, setStatus] = useState("jogando"); // 'jogando' ou 'venceu'
   const [mensagem, setMensagem] = useState("");
+  const [mostrarTutorial, setMostrarTutorial] = useState(false);
 
-  
   useEffect(() => {
     // id do filme
     setFilmeDoDia(FILMES_DB[10]);
@@ -56,7 +57,7 @@ function App() {
   /**
    * move acentos e converte para minúsculas para comparação de strings.
    */
-  const normalizar = (str) => 
+  const normalizar = (str) =>
     str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
   /**
@@ -68,10 +69,10 @@ function App() {
 
     if (valor.trim().length > 0) {
       const valorNormalizado = normalizar(valor);
-      const filtrados = FILMES_DB.filter(filme => 
+      const filtrados = FILMES_DB.filter(filme =>
         normalizar(filme.titulo).includes(valorNormalizado) &&
         !tentativas.some(t => normalizar(t.titulo) === normalizar(filme.titulo))
-      ).slice(0, 5); 
+      ).slice(0, 5);
       setSugestoes(filtrados);
     } else {
       setSugestoes([]);
@@ -91,7 +92,7 @@ function App() {
     if (!chute.trim() || status !== "jogando") return;
 
     const filmeChutado = FILMES_DB.find(f => normalizar(f.titulo) === normalizar(chute));
-    
+
     if (!filmeChutado) {
       setMensagem("Selecione um filme da lista.");
       return;
@@ -110,7 +111,7 @@ function App() {
       setStatus("venceu");
       setMensagem("Parabéns! Você acertou.");
     } else {
-      setMensagem(""); 
+      setMensagem("");
     }
 
     setChute("");
@@ -137,11 +138,16 @@ function App() {
   if (!filmeDoDia) return <div className="loading">Carregando filme do dia...</div>;
 
   return (
+
     <div className="container">
       <header>
         <h1>DESCUBRA O FILME</h1>
         <br />
         <p className="subtitle">Boa sorte!</p>
+
+        <div className='icon-help'>
+          <button onClick={() => setMostrarTutorial(true)}><AiFillAlert size={20}/></button>
+        </div>
       </header>
 
       <main className="game-area">
@@ -149,15 +155,15 @@ function App() {
         <section className="input-section">
           <div className="input-wrapper">
             <form onSubmit={handleEnviarChute}>
-              <input 
-                type="text" 
-                value={chute} 
-                onChange={handleInputChange} 
-                placeholder="Qual filme você está pensando?" 
-                disabled={status !== "jogando"} 
-                autoComplete="off" 
+              <input
+                type="text"
+                value={chute}
+                onChange={handleInputChange}
+                placeholder="Qual filme você está pensando?"
+                disabled={status !== "jogando"}
+                autoComplete="off"
               />
-              <button type="submit" disabled={status !== "jogando"}>
+              <button className= "button-red" type="submit" disabled={status !== "jogando"}>
                 {status === "jogando" ? "CENA!" : "FIM"}
               </button>
             </form>
@@ -219,6 +225,26 @@ function App() {
           </button>
         )}
       </main>
+
+      {/* Tutorial Modal */}
+      {mostrarTutorial && (
+        <div className="modal-overlay" onClick={() => setMostrarTutorial(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h2>Como Jogar</h2>
+            <p>Descubra o filme do dia em quantas tentativas precisar!</p>
+            <ul>
+              <li>Digite o nome de um filme no campo de busca.</li>
+              <li>Cada tentativa mostrará dicas baseadas no filme secreto.</li>
+              <li><span className="text-match">Verde</span>: Combinação exata.</li>
+              <li><span className="text-wrong">Cinza</span>: Diferente do filme do dia.</li>
+              <li>As setas (↑ ou ↓) indicam se o valor correto é maior ou menor.</li>
+            </ul>
+            <button className="button-red" onClick={() => setMostrarTutorial(false)}>
+              ENTENDI!
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
