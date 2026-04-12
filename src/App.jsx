@@ -1,75 +1,44 @@
 import { useState, useEffect } from 'react';
 import './App.css';
 import { AiFillAlert } from "react-icons/ai";
-/**
- * Banco de dados temporário de filmes para testes.
- * Cada filme contém atributos para comparação no jogo.
- */
-
-const FILMES_DB = [
-  { titulo: "Procurando Nemo", ano: 2003, genero: "Aventura", estudio: "Pixar", diretor: "Andrew Stanton", duracao: 100 },
-  { titulo: "A Era do Gelo", ano: 2002, genero: "Comédia", estudio: "Blue Sky", diretor: "Chris Wedge", duracao: 81 },
-  { titulo: "A Era do Gelo 2", ano: 2006, genero: "Comédia", estudio: "Blue Sky", diretor: "Carlos Saldanha", duracao: 91 },
-  { titulo: "A Era do Gelo 3", ano: 2009, genero: "Comédia", estudio: "Blue Sky", diretor: "Carlos Saldanha", duracao: 94 },
-  { titulo: "A Era do Gelo 4", ano: 2012, genero: "Comédia", estudio: "Blue Sky", diretor: "Steve Martino", duracao: 88 },
-  { titulo: "A Era do Gelo: O Big Bang", ano: 2016, genero: "Comédia", estudio: "Blue Sky", diretor: "Mike Thurmeier", duracao: 94 },
-  { titulo: "Toy Story", ano: 1995, genero: "Aventura", estudio: "Pixar", diretor: "John Lasseter", duracao: 81 },
-  { titulo: "Shrek", ano: 2001, genero: "Comédia", estudio: "Dreamworks", diretor: "Andrew Adamson", duracao: 90 },
-  { titulo: "Carros", ano: 2006, genero: "Aventura", estudio: "Pixar", diretor: "John Lasseter", duracao: 117 },
-  { titulo: "Monstros S.A.", ano: 2001, genero: "Comédia", estudio: "Pixar", diretor: "Pete Docter", duracao: 92 },
-  { titulo: "Interestelar", ano: 2014, genero: "Ficção Científica", estudio: "Warner Bros", diretor: "Christopher Nolan", duracao: 169 },
-  { titulo: "O Poderoso Chefão", ano: 1972, genero: "Crime", estudio: "Paramount", diretor: "Francis Ford Coppola", duracao: 175 },
-  { titulo: "Pulp Fiction", ano: 1994, genero: "Crime", estudio: "Miramax", diretor: "Quentin Tarantino", duracao: 154 },
-  { titulo: "Batman: O Cavaleiro das Trevas", ano: 2008, genero: "Ação", estudio: "Warner Bros", diretor: "Christopher Nolan", duracao: 152 },
-  { titulo: "Parasita", ano: 2019, genero: "Suspense", estudio: "CJ Entertainment", diretor: "Bong Joon-ho", duracao: 132 },
-  { titulo: "Matrix", ano: 1999, genero: "Ficção Científica", estudio: "Warner Bros", diretor: "Lana Wachowski", duracao: 136 },
-  { titulo: "O Rei Leão", ano: 1994, genero: "Animação", estudio: "Disney", diretor: "Roger Allers", duracao: 88 },
-  { titulo: "Titanic", ano: 1997, genero: "Romance", estudio: "Paramount", diretor: "James Cameron", duracao: 194 },
-  { titulo: "Vingadores: Ultimato", ano: 2019, genero: "Ação", estudio: "Marvel", diretor: "Anthony Russo", duracao: 181 },
-  { titulo: "Coringa", ano: 2019, genero: "Drama", estudio: "Warner Bros", diretor: "Todd Phillips", duracao: 122 },
-  { titulo: "O Silêncio dos Inocentes", ano: 1991, genero: "Suspense", estudio: "Orion", diretor: "Jonathan Demme", duracao: 118 },
-  { titulo: "Forrest Gump", ano: 1994, genero: "Drama", estudio: "Paramount", diretor: "Robert Zemeckis", duracao: 142 },
-  { titulo: "Clube da Luta", ano: 1999, genero: "Drama", estudio: "Fox", diretor: "David Fincher", duracao: 139 },
-  { titulo: "Inception", ano: 2010, genero: "Ficção Científica", estudio: "Warner Bros", diretor: "Christopher Nolan", duracao: 148 },
-  { titulo: "Jurassic Park", ano: 1993, genero: "Aventura", estudio: "Universal", diretor: "Steven Spielberg", duracao: 127 },
-  { titulo: "O Exorcista", ano: 1973, genero: "Terror", estudio: "Warner Bros", diretor: "William Friedkin", duracao: 122 },
-  { titulo: "La La Land", ano: 2016, genero: "Musical", estudio: "Summit Entertainment", diretor: "Damien Chazelle", duracao: 128 },
-  { titulo: "Gladiador", ano: 2000, genero: "Ação", estudio: "DreamWorks", diretor: "Ridley Scott", duracao: 155 },
-  { titulo: "A Viagem de Chihiro", ano: 2001, genero: "Animação", estudio: "Studio Ghibli", diretor: "Hayao Miyazaki", duracao: 125 },
-  { titulo: "Cidade de Deus", ano: 2002, genero: "Drama", estudio: "O2 Filmes", diretor: "Fernando Meirelles", duracao: 130 }
-];
+import api from './services/api';
 
 function App() {
-  // --- Estados do Jogo ---
+ 
+  const [filmesDb, setFilmesDb] = useState([]);
   const [filmeDoDia, setFilmeDoDia] = useState(null);
   const [chute, setChute] = useState("");
   const [sugestoes, setSugestoes] = useState([]);
   const [tentativas, setTentativas] = useState([]);
-  const [status, setStatus] = useState("jogando"); // 'jogando' ou 'venceu'
+  const [status, setStatus] = useState("jogando");
   const [mensagem, setMensagem] = useState("");
   const [mostrarTutorial, setMostrarTutorial] = useState(false);
 
   useEffect(() => {
-    // id do filme
-    setFilmeDoDia(FILMES_DB[10]);
+    async function carregarDados() {
+      try {
+        const resFilmes = await api.get('/filmes');
+        const resFilmeDia = await api.get('/filme-do-dia');
+        setFilmesDb(resFilmes.data);
+        setFilmeDoDia(resFilmeDia.data);
+      } catch (error) {
+        console.error("Erro ao buscar filmes:", error);
+        setMensagem("Erro ao conectar com o servidor.");
+      }
+    }
+    carregarDados();
   }, []);
 
-  /**
-   * move acentos e converte para minúsculas para comparação de strings.
-   */
   const normalizar = (str) =>
     str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-  /**
-   * Gerencia a mudança no campo de input e filtra sugestões.
-   */
   const handleInputChange = (e) => {
     const valor = e.target.value;
     setChute(valor);
 
     if (valor.trim().length > 0) {
       const valorNormalizado = normalizar(valor);
-      const filtrados = FILMES_DB.filter(filme =>
+      const filtrados = filmesDb.filter(filme =>
         normalizar(filme.titulo).includes(valorNormalizado) &&
         !tentativas.some(t => normalizar(t.titulo) === normalizar(filme.titulo))
       ).slice(0, 5);
@@ -84,14 +53,11 @@ function App() {
     setSugestoes([]);
   };
 
-  /**
-   * Processa o envio de um palpite.
-   */
   const handleEnviarChute = (e) => {
     if (e) e.preventDefault();
     if (!chute.trim() || status !== "jogando") return;
 
-    const filmeChutado = FILMES_DB.find(f => normalizar(f.titulo) === normalizar(chute));
+    const filmeChutado = filmesDb.find(f => normalizar(f.titulo) === normalizar(chute));
 
     if (!filmeChutado) {
       setMensagem("Selecione um filme da lista.");
@@ -106,7 +72,6 @@ function App() {
     const novasTentativas = [...tentativas, filmeChutado];
     setTentativas(novasTentativas);
 
-    // Verifica vitória
     if (normalizar(filmeChutado.titulo) === normalizar(filmeDoDia.titulo)) {
       setStatus("venceu");
       setMensagem("Parabéns! Você acertou.");
@@ -117,8 +82,6 @@ function App() {
     setChute("");
     setSugestoes([]);
   };
-
-  // --- Lógica de Comparação Visual ---
 
   const compareAno = (val) => {
     if (val === filmeDoDia.ano) return { cl: "match", txt: val };
@@ -134,24 +97,20 @@ function App() {
     return val === filmeDoDia[campo] ? "match" : "wrong";
   };
 
-  // Renderização de carregamento
   if (!filmeDoDia) return <div className="loading">Carregando filme do dia...</div>;
 
   return (
-
     <div className="container">
       <header>
         <h1>DESCUBRA O FILME</h1>
         <br />
         <p className="subtitle">Boa sorte!</p>
-
         <div className='icon-help'>
-          <button onClick={() => setMostrarTutorial(true)}><AiFillAlert size={20}/></button>
+          <button onClick={() => setMostrarTutorial(true)}><AiFillAlert size={20} /></button>
         </div>
       </header>
 
       <main className="game-area">
-        {/* Seção de Entrada do Usuário */}
         <section className="input-section">
           <div className="input-wrapper">
             <form onSubmit={handleEnviarChute}>
@@ -163,12 +122,10 @@ function App() {
                 disabled={status !== "jogando"}
                 autoComplete="off"
               />
-              <button className= "button-red" type="submit" disabled={status !== "jogando"}>
+              <button className="button-red" type="submit" disabled={status !== "jogando"}>
                 {status === "jogando" ? "CENA!" : "FIM"}
               </button>
             </form>
-
-            {/* Lista de Sugestões (Autocomplete) */}
             {sugestoes.length > 0 && (
               <ul className="suggestions-list">
                 {sugestoes.map((s, i) => (
@@ -182,7 +139,6 @@ function App() {
           {mensagem && <p className={`status-msg ${status}`}>{mensagem}</p>}
         </section>
 
-        {/* Listagem de Tentativas Realizadas */}
         <section className="tentativas-list">
           {tentativas.length > 0 && <h3>Suas Tentativas ({tentativas.length})</h3>}
           <ul>
@@ -218,7 +174,6 @@ function App() {
           </ul>
         </section>
 
-        {/* Controle de Reinício */}
         {status !== "jogando" && (
           <button className="reset-btn" onClick={() => window.location.reload()}>
             NOVA SESSÃO
@@ -226,7 +181,6 @@ function App() {
         )}
       </main>
 
-      {/* Tutorial Modal */}
       {mostrarTutorial && (
         <div className="modal-overlay" onClick={() => setMostrarTutorial(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -237,7 +191,6 @@ function App() {
               <li>Cada tentativa mostrará dicas baseadas no filme secreto.</li>
               <li><span className="text-match">Verde</span>: Combinação exata.</li>
               <li><span className="text-wrong">Cinza</span>: Diferente do filme do dia.</li>
-              <li>As setas (↑ ou ↓) indicam se o valor correto é maior ou menor.</li>
             </ul>
             <button className="button-red" onClick={() => setMostrarTutorial(false)}>
               ENTENDI!
