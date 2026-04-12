@@ -41,7 +41,7 @@ function App() {
       const filtrados = filmesDb.filter(filme =>
         normalizar(filme.titulo).includes(valorNormalizado) &&
         !tentativas.some(t => normalizar(t.titulo) === normalizar(filme.titulo))
-      ).slice(0, 5);
+      );
       setSugestoes(filtrados);
     } else {
       setSugestoes([]);
