@@ -294,6 +294,13 @@ input:focus {
 .feedback-tag.match span { color: #00e676; }
 .feedback-tag.match .tag-label { color: #00e676; opacity: 0.8; }
 
+.feedback-tag.match.partial {
+  background: rgba(255, 152, 0, 0.08);
+  border-color: rgba(255, 152, 0, 0.4);
+}
+.feedback-tag.match.partial span { color: #ffb74d; }
+.feedback-tag.match.partial .tag-label { color: #ffb74d; opacity: 0.8; }
+
 .feedback-tag.wrong {
   background: rgba(255, 255, 255, 0.02);
 }
@@ -426,6 +433,11 @@ input:focus {
 
 .text-match {
   color: #00e676;
+  font-weight: bold;
+}
+
+.text-partial {
+  color: #ffb74d;
   font-weight: bold;
 }
 

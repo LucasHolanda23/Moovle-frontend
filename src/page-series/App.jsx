@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import './App.css';
 import { AiFillAlert } from "react-icons/ai";
-import api from './services/api';
+import api from '../services/api';
 
-function App() {
+function Series() {
  
   const [filmesDb, setFilmesDb] = useState([]);
   const [filmeDoDia, setFilmeDoDia] = useState(null);
@@ -97,12 +97,29 @@ function App() {
     return val === filmeDoDia[campo] ? "match" : "wrong";
   };
 
+  const compareGenero = (val) => {
+    // Normaliza para comparação (ignora maiúsculas/minúsculas)
+    const listGuessed = val.toLowerCase().split(", ").map(g => g.trim());
+    const listCorrect = filmeDoDia.genero.toLowerCase().split(", ").map(g => g.trim());
+
+    // Se todos os gêneros baterem perfeitamente
+    const allMatch = listGuessed.length === listCorrect.length && 
+                     listGuessed.every(g => listCorrect.includes(g));
+    if (allMatch) return "match";
+
+    // Se pelo menos um gênero bater (amarelo/laranja)
+    const someMatch = listGuessed.some(g => listCorrect.includes(g));
+    if (someMatch) return "match partial";
+
+    return "wrong";
+  };
+
   if (!filmeDoDia) return <div className="loading">Carregando filme do dia...</div>;
 
   return (
     <div className="container">
       <header>
-        <h1>DESCUBRA O FILME</h1>
+        <h1>DESCUBRA A SERIE</h1>
         <br />
         <p className="subtitle">Boa sorte!</p>
         <div className='icon-help'>
@@ -152,7 +169,7 @@ function App() {
                     <span className="tag-label">ANO</span>
                     <span>{compareAno(t.ano).txt}</span>
                   </div>
-                  <div className={`feedback-tag ${compareExact("genero", t.genero)}`}>
+                  <div className={`feedback-tag ${compareGenero(t.genero)}`}>
                     <span className="tag-label">GÊNERO</span>
                     <span>{t.genero}</span>
                   </div>
@@ -188,9 +205,11 @@ function App() {
             <p>Descubra o filme do dia em quantas tentativas precisar!</p>
             <ul>
               <li>Digite o nome de um filme no campo de busca.</li>
-              <li>Cada tentativa mostrará dicas baseadas no filme secreto.</li>
-              <li><span className="text-match">Verde</span>: Combinação exata.</li>
-              <li><span className="text-wrong">Cinza</span>: Diferente do filme do dia.</li>
+              <li>Cada tentativa mostrará dicas baseadas no filme secreto:</li>
+              <li><span className="text-match">Verde</span>: Acerto exato em todos os campos.</li>
+              <li><span className="text-partial">Amarelo</span>: Acerto parcial (pelo menos um gênero em comum).</li>
+              <li><span className="text-wrong">Cinza</span>: Erro total (nenhuma correspondência).</li>
+              <li><span className="text-match">↑ / ↓</span>: O ano ou duração é maior ou menor.</li>
             </ul>
             <button className="button-red" onClick={() => setMostrarTutorial(false)}>
               ENTENDI!
@@ -202,4 +221,4 @@ function App() {
   );
 }
 
-export default App;
+export default Series;
