@@ -8,11 +8,11 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 const router = createBrowserRouter([
   {
-    path: "/moves",
+    path: "/",
     element: <App />,
   },
   {
-    path: "/serie",
+    path: "/series",
     element: <Series />,
   },
   {
@@ -20,7 +20,7 @@ const router = createBrowserRouter([
     element: <Anime />,
   },
 ],
-  { basename: "/Moovle-frontend", }
+  { basename: "/", }
 );
 
 createRoot(document.getElementById('root')).render(

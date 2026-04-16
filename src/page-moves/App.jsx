@@ -121,7 +121,7 @@ function App() {
       <header>
         <h1>DESCUBRA O FILME</h1>
         <br />
-        <p className="subtitle">Boa sorte!</p>
+        <p className="subtitle">Que o filme esteja com voce !</p>
         <div className='icon-help'>
           <button onClick={() => setMostrarTutorial(true)}><AiFillAlert size={20} /></button>
         </div>
