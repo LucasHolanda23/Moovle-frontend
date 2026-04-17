@@ -140,7 +140,7 @@ function Anime() {
                 autoComplete="off"
               />
               <button className="button-red" type="submit" disabled={status !== "jogando"}>
-                {status === "jogando" ? "CENA!" : "FIM"}
+                {status === "jogando" ? "CHUTE" : "FIM"}
               </button>
             </form>
             {sugestoes.length > 0 && (
