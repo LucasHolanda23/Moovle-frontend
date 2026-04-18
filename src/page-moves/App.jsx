@@ -160,13 +160,16 @@ function App() {
             )}
           </div>
           <div className="action-buttons">
-            <button 
+
+            {
+            //BUTAO DE DICA
+            /* <button 
               className="button-outline" 
               onClick={() => {}} 
               disabled={status !== "jogando"}
             >
               DICA
-            </button>
+            </button> */}
             <button 
               className="button-outline" 
               onClick={handleDesistir} 
