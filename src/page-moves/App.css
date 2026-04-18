@@ -130,6 +130,39 @@ input:focus {
   box-shadow: none;
 }
 
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.button-outline {
+  padding: 0.8rem 2rem;
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: transparent;
+  color: var(--text-dim);
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.button-outline:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.button-outline:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
 .suggestions-list {
   position: absolute;
   top: calc(100% + 8px);
@@ -185,6 +218,14 @@ input:focus {
   text-align: center;
   margin-top: 1.5rem;
   letter-spacing: 0.5px;
+}
+
+.status-msg.venceu {
+  color: var(--success);
+}
+
+.status-msg.desistiu {
+  color: var(--error);
 }
 
 .tentativas-list {

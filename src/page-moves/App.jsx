@@ -83,6 +83,12 @@ function App() {
     setSugestoes([]);
   };
 
+  const handleDesistir = () => {
+    if (status !== "jogando") return;
+    setStatus("desistiu");
+    setMensagem(`Você desistiu. O filme era: ${filmeDoDia.titulo}`);
+  };
+
   const compareAno = (val) => {
     if (val === filmeDoDia.ano) return { cl: "match", txt: val };
     return { cl: "wrong", txt: `${val} ${val < filmeDoDia.ano ? "↑" : "↓"}` };
@@ -152,6 +158,22 @@ function App() {
                 ))}
               </ul>
             )}
+          </div>
+          <div className="action-buttons">
+            <button 
+              className="button-outline" 
+              onClick={() => {}} 
+              disabled={status !== "jogando"}
+            >
+              DICA
+            </button>
+            <button 
+              className="button-outline" 
+              onClick={handleDesistir} 
+              disabled={status !== "jogando"}
+            >
+              DESISTIR
+            </button>
           </div>
           {mensagem && <p className={`status-msg ${status}`}>{mensagem}</p>}
         </section>
